@@ -42,6 +42,8 @@ fn main() -> std::io::Result<()> {
     let mut events_4624 = Vec::new();
     let mut events_4625 = Vec::new();
 
+    let mut events_type = HashMap::new();
+
     for event in events.iter() {
         let system = event
             .children
@@ -93,7 +95,11 @@ fn main() -> std::io::Result<()> {
         } else if event_id == "4625" {
             events_4625.push(event.clone());
         }
+
+        *events_type.entry(event_id).or_insert(0) += 1;
     }
+
+    println!("event type count: {:#?}", events_type);
 
     let mut event_4624_users_frequncy: HashMap<String, [usize; 24]> = HashMap::new();
 
@@ -142,7 +148,7 @@ fn main() -> std::io::Result<()> {
     sorted_events_4624_users.sort_by(|a, b| b.1.cmp(a.1));
 
     println!("users: {:?}", sorted_events_4624_users);
-    print!("user count: {}", sorted_events_4624_users.len());
+    println!("user count: {}", sorted_events_4624_users.len());
 
     println!("event 4625 count: {}", events_4625.len());
     println!("events 4625: {:#?}", events_4625);
